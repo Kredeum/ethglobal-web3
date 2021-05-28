@@ -4,11 +4,11 @@ import fs from "fs";
 async function graphQL(url, query) {
   let response;
   try {
-    response = await fetch(url, { 
-      method: 'POST',
-      body: JSON.stringify({query}),
-      headers: { 'Content-Type': 'application/json' }
-      });
+    response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ query }),
+      headers: { "Content-Type": "application/json" }
+    });
   } catch (error) {
     console.error(error);
   }
@@ -20,5 +20,5 @@ const url = process.argv[3] || "https://api.thegraph.com/subgraphs/name/zapaz/ei
 const query = fs.readFileSync(queryFile, "utf8");
 
 graphQL(url, query)
-    .then(res => res.json())
-    .then(json =>console.log(JSON.stringify(json, null,2)));
+  .then((res) => res.json())
+  .then((json) => console.log(JSON.stringify(json, null, 2)));

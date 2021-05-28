@@ -1,4 +1,10 @@
+# VSCODE
+settings.json
+
+# NPM
 node_modules
+
+# SUBGRAPH
+thegraph/subgraph.yaml
 thegraph/build
 thegraph/generated
-settings.json

@@ -8,7 +8,6 @@ install `subgraph-deploy`
 
 `npm i -D subgraph-deploy`
 
-
 in your package.json you can add a script to deploy that subgraph in your running graph-node
 
 ```json
@@ -20,6 +19,7 @@ in your package.json you can add a script to deploy that subgraph in your runnin
 ```
 
 # example graphQL query
+
 ```
 {
   tokens {
@@ -30,7 +30,6 @@ in your package.json you can add a script to deploy that subgraph in your runnin
   }
 }
 ```
-
 
 or
 
@@ -43,7 +42,7 @@ or
     tokenURI
     mintTime
   }
-  
+
   tokenContracts {
     id
   }
