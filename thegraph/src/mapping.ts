@@ -2,7 +2,7 @@ import { store, Bytes, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer, EIP721 } from '../generated/EIP721/EIP721';
 import { Token, TokenContract, Owner, All, OwnerPerTokenContract } from '../generated/schema';
 
-// import { log } from '@graphprotocol/graph-ts';
+import { ipfs, log } from '@graphprotocol/graph-ts';
 
 let zeroAddress = '0x0000000000000000000000000000000000000000';
 
@@ -130,17 +130,16 @@ export function handleTransfer(event: Transfer): void {
                 eip721Token.contract = tokenContract.id;
                 eip721Token.tokenID = tokenId;
                 eip721Token.mintTime = event.block.timestamp;
+                eip721Token.tokenURI = "";
+                eip721Token.tokenJSON = "";
                 if (tokenContract.supportsEIP721Metadata) {
                     let metadataURI = contract.try_tokenURI(tokenId);
                     if(!metadataURI.reverted) {
-                        eip721Token.tokenURI = normalize(metadataURI.value);
-                    } else {
-                        eip721Token.tokenURI = "";
+                        eip721Token.tokenURI = normalize(metadataURI.value);          
+                        let cid = eip721Token.tokenURI.substring(eip721Token.tokenURI.lastIndexOf("/") + 1);
+                        eip721Token.tokenJSON  = (cid && ipfs.cat(cid).toString()) || "";
                     }
-                } else {
-                    // log.error('tokenURI not supported {}', [tokenContract.id]);
-                    eip721Token.tokenURI = ""; // TODO null ?
-                }
+                } 
             }
             
             all.numTokens = all.numTokens.plus(BigInt.fromI32(1));

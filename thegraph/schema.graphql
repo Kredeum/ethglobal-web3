@@ -12,6 +12,7 @@ type Token @entity {
   owner: Owner!
   mintTime: BigInt!
   tokenURI: String!
+  tokenJSON: String!
 }
 
 type TokenContract @entity {

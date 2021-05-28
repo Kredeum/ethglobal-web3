@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: EIP-721
-repository: https://github.com/wighawag/eip721-subgraph
+repository: https://github.com/Kredeum/ethglobal-web3
 schema:
   file: ./schema.graphql
 dataSources:
@@ -9,7 +9,6 @@ dataSources:
     network: mumbai
     source:
       abi: EIP721
-      startBlock: 14396515
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
