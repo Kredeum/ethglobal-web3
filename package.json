@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "sub-clean": "rm -rf thegraph/build thegraph/generated",
-    "sub-build": "cd thegraph && graph codegen && graph build",
-    "sub-check": "npx prettier-eslint thegraph/**/*js thegraph/**/*.ts thegraph/**/*.json thegraph/**/*.yaml thegraph/**/*.graphql thegraph/**/*.md --write",
-    "sub-deploy": "cd thegraph && graph deploy zapaz/eip721-mumbai --debug  --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+    "sub-codegen": "cd thegraph && graph codegen",
+    "sub-build": "cd thegraph && graph build",
+    "sub-deploy": "cd thegraph && graph deploy zapaz/eip721-mumbai --debug  --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "sub-all": "npm run sub-clean && npm run sub-codegen && npm run sub-build && npm run sub-deploy"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
     "@graphprotocol/graph-ts": "^0.20.0",
-    "hardhat": "^2.3.0"
+    "hardhat": "^2.3.0",
+    "node-fetch": "^2.6.1"
   }
 }
