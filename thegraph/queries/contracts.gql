@@ -1,0 +1,10 @@
+{
+  tokenContracts(first: 99) {
+    id
+    name
+    symbol
+    supportsEIP721Metadata
+    numTokens
+    numOwners
+  }
+}

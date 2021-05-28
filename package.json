@@ -1,0 +1,28 @@
+{
+  "name": "ethglobal-web3",
+  "version": "1.0.0",
+  "description": "ETHGlobal Web3 Hackathon - NFT Import project",
+  "main": "index.js",
+  "scripts": {
+    "sub-clean": "rm -rf thegraph/build thegraph/generated",
+    "sub-build": "cd thegraph && graph codegen && graph build",
+    "sub-check": "npx prettier-eslint thegraph/**/*js thegraph/**/*.ts thegraph/**/*.json thegraph/**/*.yaml thegraph/**/*.graphql thegraph/**/*.md --write",
+    "sub-deploy": "cd thegraph && graph deploy zapaz/eip721-mumbai --debug  --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kredeum/ethglobal-web3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kredeum/ethglobal-web3/issues"
+  },
+  "homepage": "https://github.com/Kredeum/ethglobal-web3#readme",
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.20.0",
+    "hardhat": "^2.3.0"
+  }
+}

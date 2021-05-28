@@ -1,0 +1,4 @@
+node_modules
+thegraph/build
+thegraph/generated
+settings.json
