@@ -8,3 +8,6 @@ node_modules
 thegraph/subgraph.yaml
 thegraph/build
 thegraph/generated
+
+# DAPP
+dapp/build

@@ -5,16 +5,8 @@
   "tabWidth": 2,
   "trailingComma": "none",
   "semi": true,
-  "plugins": [
-    "./node_modules/prettier-plugin-svelte"
-  ],
+  "plugins": ["./node_modules/prettier-plugin-svelte"],
   "overrides": [
-    {
-      "files": "*.sol",
-      "options": {
-        "singleQuote": false
-      }
-    },
     {
       "files": "*.svelte",
       "options": {
