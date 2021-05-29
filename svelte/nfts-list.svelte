@@ -1,4 +1,4 @@
-<svelte:options tag="my-nfts" />
+<svelte:options tag="nfts-list" />
 
 <script>
   import Metamask from "./kredeum-metamask.svelte";
@@ -12,8 +12,9 @@
   let chainId = 0;
 
   let owner = "0x981ab0D817710d8FFFC5693383C00D985A3BDa38";
-  const subGraphUrl = "https://api.thegraph.com/subgraphs/name/zapaz/mumbai-open-nft";
-
+  // const subGraphUrl = "https://api.thegraph.com/subgraphs/name/zapaz/mumbai-open-nft";
+  // const subGraphUrl = "https://api.thegraph.com/subgraphs/name/zapaz/eip721-mumbai";
+  const subGraphUrl = "https://api.thegraph.com/subgraphs/id/QmPsb5SD69bRSCb6uyUiLAFXrFmqiGbMUS1jEQwMWTY45s";
   let tokens = [];
 
   async function fetchJson(tokenURI, config = {}) {
@@ -27,30 +28,29 @@
   }
 
   async function listTheGraph() {
-    // const query = `{ tokens(id: 99) {id owner (where: {id:"${owner}"}) {id} tokenURI tokenJSON} }`;
-    const query = `{ tokens(id: 99) {id owner {id} tokenURI tokenJSON} }`;
+    // const query = `{ tokens(first: 99) {id owner (where: {id:"${owner}"}) {id} tokenURI metadata} }`;
+    // const query = `{ tokens(where: { metadata_not: "" }) {id owner {id} tokenURI metadata} }`;
+    const query = `
+    { 
+      tokens(first:99, where: { metadata_not: "" }) {
+        id 
+        owner {id} 
+        tokenURI 
+        name 
+        description 
+        image  
+        metadata
+      } 
+    }
+    `;
     const config = { method: "POST", body: JSON.stringify({ query }) };
     const answerGQL = (await fetchJson(subGraphUrl, config)).data;
     console.log("nft.listTheGraph query", query);
     console.log("nft.listTheGraph subgraphUrl", subGraphUrl);
     console.log("nft.listTheGraph answerGQL", answerGQL.tokens);
 
-    const _tokens = [];
-    answerGQL.tokens.forEach((tok, i) => {
-      const _token = {};
-      const [tokenId, contract] = tok.id.split(":");
-      _token.tokenId = Number(tokenId).toString();
-      _token.contract = contract;
-      _token.ownerOf = tok.owner.id;
-      _token.tokenURI = tok.tokenURI;
-      _token.tokenJSONraw = tok.tokenJSON;
-      _token.tokenJSON = JSON.parse(tok.tokenJSON);
-
-      _tokens[i] = _token;
-    });
-
     // console.log("nft.listTheGraph", tokens);
-    return _tokens;
+    return answerGQL.tokens;
   }
 
   onMount(async function () {
@@ -62,12 +62,11 @@
 <main>
   {#each tokens as token}
     <p>
-      {token.tokenId} - {token.contract}
-      {token.tokenURI}
+      {token.id} -{token.name} - {token.desscription}
     </p>
-    <img src="{token.tokenJSON.image}" alt="{token.tokenId}" height="300" />
+    <img src="{token.image}" alt="{token.name}" height="300" />
     <pre>
-      {token.tokenJSONraw} 
+      {token.metadata} 
     </pre>
   {/each}
   <Metamask autoconnect="off" bind:address bind:chainId bind:signer chain_ids="{chain_ids}" />

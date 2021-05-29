@@ -73,5 +73,5 @@ const toRollupConfig = function (component, dest, customElement = true) {
 
 export default [
   // toRollupConfig("kredeum-metamask", "dapp/build"), // metamask.html
-  toRollupConfig("my-nfts", "dapp/build")
+  toRollupConfig("nfts-list", "dapp/build")
 ];

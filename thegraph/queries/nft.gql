@@ -1,9 +1,20 @@
 {
   tokens(first: 99) {
+    tokenURI
+    metadata
+  }
+}
+
+query Tokens($owner: String = "0x981ab0D817710d8FFFC5693383C00D985A3BDa38") {
+  tokens(first: 9, where: { description: "RARE" }, and: { metadata_not: "" }) {
     id
     owner {
       id
     }
-    uri
+    tokenURI
+    name
+    description
+    image
+    metadata
   }
 }

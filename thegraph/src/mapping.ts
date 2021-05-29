@@ -2,7 +2,7 @@ import { store, Bytes, BigInt } from "@graphprotocol/graph-ts";
 import { Transfer, EIP721 } from "../generated/EIP721/EIP721";
 import { Token, TokenContract, Owner, All, OwnerPerTokenContract } from "../generated/schema";
 
-import { ipfs, log } from "@graphprotocol/graph-ts";
+import { ipfs, json, log } from "@graphprotocol/graph-ts";
 
 let zeroAddress = "0x0000000000000000000000000000000000000000";
 
@@ -133,13 +133,34 @@ export function handleTransfer(event: Transfer): void {
         eip721Token.tokenID = tokenId;
         eip721Token.mintTime = event.block.timestamp;
         eip721Token.tokenURI = "";
-        eip721Token.tokenJSON = "";
+        eip721Token.name = "";
+        eip721Token.description = "";
+        eip721Token.image = "";
+        eip721Token.metadata = "";
+
         if (tokenContract.supportsEIP721Metadata) {
           let metadataURI = contract.try_tokenURI(tokenId);
           if (!metadataURI.reverted) {
             eip721Token.tokenURI = normalize(metadataURI.value);
+
             let cid = eip721Token.tokenURI.substring(eip721Token.tokenURI.lastIndexOf("/") + 1);
-            eip721Token.tokenJSON = (cid && ipfs.cat(cid).toString()) || "";
+            if (cid) {
+              let jsonIpfs = ipfs.cat(cid);
+              if (jsonIpfs != null) {
+                let jsonData = json.try_fromBytes(jsonIpfs as Bytes);
+                if (!jsonData.isError) {
+                  let jsonObject = jsonData.value.toObject();
+                  if (jsonObject != null) {
+                    eip721Token.name = jsonObject.get("name").isNull() ? "" : jsonObject.get("name").toString();
+                    eip721Token.description = jsonObject.get("description").isNull()
+                      ? ""
+                      : jsonObject.get("description").toString();
+                    eip721Token.image = jsonObject.get("image").isNull() ? "" : jsonObject.get("image").toString();
+                  }
+                  eip721Token.metadata = jsonIpfs.toString();
+                }
+              }
+            }
           }
         }
       }

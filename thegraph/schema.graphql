@@ -12,13 +12,16 @@ type Token @entity {
   owner: Owner!
   mintTime: BigInt!
   tokenURI: String!
-  tokenJSON: String!
+  name: String!
+  description: String!
+  image: String!
+  metadata: String!
 }
 
 type TokenContract @entity {
   id: ID!
-  name: String,
-  symbol: String,
+  name: String
+  symbol: String
   doAllAddressesOwnTheirIdByDefault: Boolean!
   supportsEIP721Metadata: Boolean!
   tokens: [Token!]! @derivedFrom(field: "contract")
@@ -31,7 +34,6 @@ type Owner @entity {
   tokens: [Token!]! @derivedFrom(field: "owner")
   numTokens: BigInt!
 }
-
 
 type OwnerPerTokenContract @entity {
   id: ID!
