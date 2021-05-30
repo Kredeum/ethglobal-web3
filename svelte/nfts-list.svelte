@@ -10,12 +10,10 @@
 
   const chain_ids = "0x89,0x13881";
   let chainId = 0;
-
-  let owner = "0x981ab0D817710d8FFFC5693383C00D985A3BDa38";
-  // const subGraphUrl = "https://api.thegraph.com/subgraphs/name/zapaz/mumbai-open-nft";
-  // const subGraphUrl = "https://api.thegraph.com/subgraphs/name/zapaz/eip721-mumbai";
-  const subGraphUrl = "https://api.thegraph.com/subgraphs/id/QmPsb5SD69bRSCb6uyUiLAFXrFmqiGbMUS1jEQwMWTY45s";
   let tokens = [];
+
+  let owner = "0x981ab0d817710d8fffc5693383c00d985a3bda38";
+  const subGraphUrl = "https://api.thegraph.com/subgraphs/name/zapaz/eip721-mumbai";
 
   async function fetchJson(tokenURI, config = {}) {
     let json = {};
@@ -27,46 +25,42 @@
     return json;
   }
 
-  async function listTheGraph() {
+  async function listTheGraph(_address) {
     // const query = `{ tokens(first: 99) {id owner (where: {id:"${owner}"}) {id} tokenURI metadata} }`;
     // const query = `{ tokens(where: { metadata_not: "" }) {id owner {id} tokenURI metadata} }`;
+    // owner(id: "0x981ab0d817710d8fffc5693383c00d985a3bda38")
     const query = `
-    { 
-      tokens(first:99, where: { metadata_not: "" }) {
-        id 
-        owner {id} 
-        tokenURI 
-        name 
-        description 
-        image  
-        metadata
-      } 
-    }
+    {
+        tokens(first:99 where:{metadata_not:""}) {
+          id
+          tokenURI 
+          name 
+          description 
+          image  
+          metadata
+        } 
+    } 
     `;
-    const config = { method: "POST", body: JSON.stringify({ query }) };
-    const answerGQL = (await fetchJson(subGraphUrl, config)).data;
-    console.log("nft.listTheGraph query", query);
-    console.log("nft.listTheGraph subgraphUrl", subGraphUrl);
-    console.log("nft.listTheGraph answerGQL", answerGQL.tokens);
+    console.log("listTheGraph subgraphUrl", subGraphUrl);
+    console.log("listTheGraph query", query);
 
-    // console.log("nft.listTheGraph", tokens);
-    return answerGQL.tokens;
+    const answerGQL = await fetchJson(subGraphUrl, { method: "POST", body: JSON.stringify({ query }) });
+    console.log("listTheGraph answerGQL", answerGQL);
+
+    return answerGQL?.data?.tokens || [];
   }
 
   onMount(async function () {
-    tokens = await listTheGraph();
+    tokens = await listTheGraph(owner);
     console.log("tokens", tokens);
   });
 </script>
 
 <main>
   {#each tokens as token}
-    <p>
-      {token.id} -{token.name} - {token.desscription}
-    </p>
-    <img src="{token.image}" alt="{token.name}" height="300" />
+    <img src="{token.image}" alt="{token.name}" height="50" />
     <pre>
-      {token.metadata} 
+      {JSON.stringify(JSON.parse(token.metadata), null, 2)} 
     </pre>
   {/each}
   <Metamask autoconnect="off" bind:address bind:chainId bind:signer chain_ids="{chain_ids}" />
